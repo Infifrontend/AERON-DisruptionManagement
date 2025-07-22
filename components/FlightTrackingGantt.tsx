@@ -397,4 +397,5 @@ export function FlightTrackingGantt() {
     aircraftType: 'all',
     status: 'all',
     route: 'all',
-    search: '',
+    search: ''
+  }

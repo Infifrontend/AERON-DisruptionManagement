@@ -22,8 +22,10 @@ import {
   ArrowUp,
   ArrowDown,
   Calendar,
-  RefreshCw
+  RefreshCw,
+  DollarSign
 } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
 export function DisruptionPredictionDashboard() {
   const [selectedTimeframe, setSelectedTimeframe] = useState('24h')
@@ -371,9 +373,3 @@ export function DisruptionPredictionDashboard() {
                 <strong>Info:</strong> Model retraining completed - improved accuracy expected for next 24h predictions
               </AlertDescription>
             </Alert>
-          </div>
-        </TabsContent>
-      </Tabs>
-    </div>
-  )
-}
