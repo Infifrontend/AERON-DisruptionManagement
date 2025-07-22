@@ -47,4 +47,22 @@ export function DisruptionPredictionDashboard() {
       impact: 'High', 
       affected: 28, 
       trend: 'up',
-      description: 'Severe thunderstorms predicted at JFK, LGA',
+      description: 'Severe thunderstorms predicted at JFK, LGA'
+    },
+    { 
+      id: 2, 
+      name: 'Aircraft Maintenance', 
+      impact: 'Medium', 
+      affected: 15, 
+      trend: 'down',
+      description: 'Routine maintenance schedule adjustments'
+    },
+    { 
+      id: 3, 
+      name: 'Crew Availability', 
+      impact: 'Low', 
+      affected: 8, 
+      trend: 'stable',
+      description: 'Minor crew scheduling conflicts'
+    }
+  ]
