@@ -1101,3 +1101,25 @@ export function DisruptionInput({ disruption, onSelectFlight }) {
     </div>
   )
 }
+'use client'
+
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+
+interface DisruptionInputProps {
+  disruption: any
+  onSelectFlight: (flight: any) => void
+}
+
+export function DisruptionInput({ disruption, onSelectFlight }: DisruptionInputProps) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Affected Flights</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>Disruption input component</p>
+      </CardContent>
+    </Card>
+  )
+}

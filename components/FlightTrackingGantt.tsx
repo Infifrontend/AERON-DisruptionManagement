@@ -966,3 +966,20 @@ export function FlightTrackingGantt() {
     </div>
   )
 }
+'use client'
+
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+
+export function FlightTrackingGantt() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Flight Tracking Gantt</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>Flight tracking gantt component</p>
+      </CardContent>
+    </Card>
+  )
+}

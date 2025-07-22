@@ -1142,3 +1142,20 @@ export function FlightDisruptionList() {
     </div>
   )
 }
+'use client'
+
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+
+export function FlightDisruptionList() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Flight Disruption List</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>Flight disruption list component</p>
+      </CardContent>
+    </Card>
+  )
+}

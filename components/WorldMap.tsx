@@ -548,3 +548,43 @@ export function WorldMap() {
     </Card>
   )
 }
+'use client'
+
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { Badge } from './ui/badge'
+import { Plane, AlertTriangle, CheckCircle } from 'lucide-react'
+
+export function WorldMap() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Plane className="h-5 w-5 text-flydubai-blue" />
+          Flydubai Network Status
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="h-96 bg-slate-50 rounded-lg flex items-center justify-center relative">
+          <div className="text-center">
+            <p className="text-lg font-medium text-flydubai-navy mb-4">Interactive Network Map</p>
+            <div className="grid grid-cols-3 gap-4 text-sm">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500" />
+                <span>47 Routes Active</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 text-orange-500" />
+                <span>3 Disrupted</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Plane className="h-4 w-4 text-flydubai-blue" />
+                <span>89 Flights Today</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}

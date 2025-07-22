@@ -3241,3 +3241,26 @@ export function RecoveryOptionsGenerator({ selectedFlight, onSelectPlan, onCompa
     </div>
   )
 }
+'use client'
+
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+
+interface RecoveryOptionsGeneratorProps {
+  selectedFlight: any
+  onSelectPlan: (plan: any) => void
+  onCompare: () => void
+}
+
+export function RecoveryOptionsGenerator({ selectedFlight, onSelectPlan, onCompare }: RecoveryOptionsGeneratorProps) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Recovery Options Generator</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>Recovery options generator component</p>
+      </CardContent>
+    </Card>
+  )
+}

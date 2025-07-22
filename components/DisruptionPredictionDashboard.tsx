@@ -394,3 +394,40 @@ export function DisruptionPredictionDashboard() {
     </div>
   )
 }
+'use client'
+
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { Badge } from './ui/badge'
+import { Brain, AlertTriangle, TrendingUp } from 'lucide-react'
+
+export function DisruptionPredictionDashboard() {
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Brain className="h-5 w-5 text-flydubai-navy" />
+            AI Disruption Prediction Dashboard
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="text-center p-4 bg-blue-50 rounded-lg">
+              <h3 className="font-semibold text-flydubai-navy">Predictions Today</h3>
+              <p className="text-2xl font-bold text-flydubai-blue">32</p>
+            </div>
+            <div className="text-center p-4 bg-green-50 rounded-lg">
+              <h3 className="font-semibold text-flydubai-navy">Accuracy Rate</h3>
+              <p className="text-2xl font-bold text-green-600">94.1%</p>
+            </div>
+            <div className="text-center p-4 bg-orange-50 rounded-lg">
+              <h3 className="font-semibold text-flydubai-navy">High Risk Flights</h3>
+              <p className="text-2xl font-bold text-orange-600">12</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
