@@ -86,3 +86,39 @@ export function FuelOptimization() {
     </Card>
   )
 }
+
+export function AircraftMaintenance() {
+  return (
+    <Card>
+      <CardHeader><CardTitle>Aircraft Maintenance</CardTitle></CardHeader>
+      <CardContent><p>Aircraft maintenance component</p></CardContent>
+    </Card>
+  )
+}
+
+export function PassengerRebooking() {
+  return (
+    <Card>
+      <CardHeader><CardTitle>Passenger Rebooking</CardTitle></CardHeader>
+      <CardContent><p>Passenger rebooking component</p></CardContent>
+    </Card>
+  )
+}
+
+export function HOTACManagement() {
+  return (
+    <Card>
+      <CardHeader><CardTitle>HOTAC Management</CardTitle></CardHeader>
+      <CardContent><p>HOTAC management component</p></CardContent>
+    </Card>
+  )
+}
+
+export function FuelOptimization() {
+  return (
+    <Card>
+      <CardHeader><CardTitle>Fuel Optimization</CardTitle></CardHeader>
+      <CardContent><p>Fuel optimization component</p></CardContent>
+    </Card>
+  )
+}

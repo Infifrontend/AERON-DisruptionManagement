@@ -398,7 +398,7 @@ export function FlightTrackingGantt() {
     status: 'all',
     route: 'all',
     search: ''
-  })
+  }))
 
   // Auto-refresh timer
   const [autoRefresh, setAutoRefresh] = useState(false)

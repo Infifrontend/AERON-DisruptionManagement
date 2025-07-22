@@ -1,31 +1,25 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
 import { Progress } from './ui/progress'
 import { Alert, AlertDescription } from './ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { 
-  Brain, 
-  AlertTriangle, 
   TrendingUp, 
-  Clock, 
-  Plane, 
-  CloudRain, 
-  Wrench, 
-  Users,
-  Target,
-  Activity,
+  TrendingDown, 
+  Brain,
   Zap,
+  Activity,
   ArrowUp,
   ArrowDown,
   Calendar,
   RefreshCw,
   DollarSign
 } from 'lucide-react'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
 export function DisruptionPredictionDashboard() {
   const [selectedTimeframe, setSelectedTimeframe] = useState('24h')
@@ -373,3 +367,9 @@ export function DisruptionPredictionDashboard() {
                 <strong>Info:</strong> Model retraining completed - improved accuracy expected for next 24h predictions
               </AlertDescription>
             </Alert>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}
