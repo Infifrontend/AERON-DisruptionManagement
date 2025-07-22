@@ -4,47 +4,38 @@ import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
-import { Progress } from './ui/progress'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
+import { Progress } from './ui/progress'
 import { 
-  Activity, 
+  Brain, 
   TrendingUp, 
-  BarChart3, 
-  Target, 
+  TrendingDown, 
+  Activity, 
   Clock, 
-  Brain,
+  Target, 
   AlertTriangle,
   CheckCircle,
   Download,
-  RefreshCw
+  RefreshCw,
+  BarChart3,
+  Calendar,
+  DollarSign
 } from 'lucide-react'
 
 export function PredictionAnalytics() {
-  const [timeRange, setTimeRange] = useState('7d')
-  const [modelType, setModelType] = useState('all')
+  const [timeframe, setTimeframe] = useState('7d')
+  const [metric, setMetric] = useState('accuracy')
 
-  // Mock analytics data
-  const modelPerformance = {
-    accuracy: 92.4,
-    precision: 89.7,
-    recall: 95.1,
-    f1Score: 92.3,
+  const performanceMetrics = {
     totalPredictions: 1247,
-    correctPredictions: 1152,
-    falsePositives: 38,
-    falseNegatives: 57
+    accuracyRate: 92.4,
+    falsePositives: 3.2,
+    falseNegatives: 4.4,
+    avgLeadTime: 6.8,
+    costSavings: 2340000
   }
-
-  const trendData = [
-    { period: 'Week 1', accuracy: 88.2, predictions: 167, prevented: 23 },
-    { period: 'Week 2', accuracy: 90.1, predictions: 189, prevented: 28 },
-    { period: 'Week 3', accuracy: 91.7, predictions: 203, prevented: 31 },
-    { period: 'Week 4', accuracy: 92.4, predictions: 178, prevented: 27 },
-    { period: 'Week 5', accuracy: 93.2, predictions: 221, prevented: 34 },
-    { period: 'Week 6', accuracy: 91.8, predictions: 145, prevented: 22 },
-    { period: 'Week 7', accuracy: 92.4, predictions: 144, prevented: 21 }
-  ]
 
   const causeAnalysis = [
     { cause: 'Weather', predictions: 456, accuracy: 94.2, impact: 'Very High', trend: 'increasing' },
@@ -70,42 +61,15 @@ export function PredictionAnalytics() {
     { timeSlot: '18:00-24:00', predictions: 156, accuracy: 93.6, avgDelay: 58 }
   ]
 
-  const impactMetrics = {
-    totalCostSaved: 2.8,
-    disruptionsPrevented: 187,
-    passengersProtected: 24589,
-    avgResponseTime: 12.3,
-    operationalEfficiency: 18.7
-  }
-
-  const getImpactColor = (impact) => {
-    switch (impact) {
-      case 'Very High': return 'text-red-600'
-      case 'High': return 'text-orange-600'
-      case 'Medium': return 'text-yellow-600'
-      case 'Low': return 'text-green-600'
-      default: return 'text-gray-600'
-    }
-  }
-
-  const getTrendIndicator = (trend) => {
-    switch (trend) {
-      case 'increasing': return '↗️'
-      case 'decreasing': return '↘️'
-      default: return '➡️'
-    }
-  }
-
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold">Prediction Analytics</h2>
-          <p className="text-muted-foreground">Advanced analytics and performance metrics for disruption prediction models</p>
+          <h2 className="text-2xl font-semibold text-flydubai-navy">Prediction Analytics</h2>
+          <p className="text-muted-foreground">AI model performance and disruption prediction insights</p>
         </div>
-        <div className="flex items-center gap-2">
-          <Select value={timeRange} onValueChange={setTimeRange}>
+        <div className="flex gap-2">
+          <Select value={timeframe} onValueChange={setTimeframe}>
             <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>
@@ -116,368 +80,231 @@ export function PredictionAnalytics() {
               <SelectItem value="90d">Last 90 days</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" size="sm">
+          <Button variant="outline">
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
-          <Button variant="outline" size="sm">
+          <Button className="btn-flydubai-primary">
             <Download className="h-4 w-4 mr-2" />
-            Export
+            Export Report
           </Button>
         </div>
       </div>
 
-      {/* Model Performance Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+      {/* Key Performance Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <Card>
           <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-200 rounded-lg">
-                <Target className="h-5 w-5 text-blue-700" />
-              </div>
-              <div>
-                <p className="text-sm text-blue-600">Model Accuracy</p>
-                <p className="text-2xl font-semibold text-blue-900">{modelPerformance.accuracy}%</p>
-                <p className="text-xs text-blue-600">Last 30 days</p>
-              </div>
+            <div className="flex items-center gap-2 mb-2">
+              <Target className="h-4 w-4 text-flydubai-blue" />
+              <h4 className="text-sm font-medium">Total Predictions</h4>
+            </div>
+            <p className="text-2xl font-semibold">{performanceMetrics.totalPredictions.toLocaleString()}</p>
+            <p className="text-xs text-muted-foreground">Last {timeframe}</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <CheckCircle className="h-4 w-4 text-green-600" />
+              <h4 className="text-sm font-medium">Accuracy Rate</h4>
+            </div>
+            <p className="text-2xl font-semibold">{performanceMetrics.accuracyRate}%</p>
+            <div className="flex items-center gap-1 mt-1">
+              <TrendingUp className="h-3 w-3 text-green-600" />
+              <span className="text-xs text-green-600">+2.1%</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+        <Card>
           <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-200 rounded-lg">
-                <CheckCircle className="h-5 w-5 text-green-700" />
-              </div>
-              <div>
-                <p className="text-sm text-green-600">Precision Rate</p>
-                <p className="text-2xl font-semibold text-green-900">{modelPerformance.precision}%</p>
-                <p className="text-xs text-green-600">True positive rate</p>
-              </div>
+            <div className="flex items-center gap-2 mb-2">
+              <AlertTriangle className="h-4 w-4 text-orange-600" />
+              <h4 className="text-sm font-medium">False Positives</h4>
+            </div>
+            <p className="text-2xl font-semibold">{performanceMetrics.falsePositives}%</p>
+            <div className="flex items-center gap-1 mt-1">
+              <TrendingDown className="h-3 w-3 text-green-600" />
+              <span className="text-xs text-green-600">-0.8%</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+        <Card>
           <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-200 rounded-lg">
-                <Brain className="h-5 w-5 text-purple-700" />
-              </div>
-              <div>
-                <p className="text-sm text-purple-600">F1 Score</p>
-                <p className="text-2xl font-semibold text-purple-900">{modelPerformance.f1Score}%</p>
-                <p className="text-xs text-purple-600">Balanced metric</p>
-              </div>
+            <div className="flex items-center gap-2 mb-2">
+              <Activity className="h-4 w-4 text-red-600" />
+              <h4 className="text-sm font-medium">False Negatives</h4>
+            </div>
+            <p className="text-2xl font-semibold">{performanceMetrics.falseNegatives}%</p>
+            <div className="flex items-center gap-1 mt-1">
+              <TrendingDown className="h-3 w-3 text-green-600" />
+              <span className="text-xs text-green-600">-1.2%</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+        <Card>
           <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-200 rounded-lg">
-                <Activity className="h-5 w-5 text-orange-700" />
-              </div>
-              <div>
-                <p className="text-sm text-orange-600">Total Predictions</p>
-                <p className="text-2xl font-semibold text-orange-900">{modelPerformance.totalPredictions.toLocaleString()}</p>
-                <p className="text-xs text-orange-600">This period</p>
-              </div>
+            <div className="flex items-center gap-2 mb-2">
+              <Clock className="h-4 w-4 text-flydubai-blue" />
+              <h4 className="text-sm font-medium">Avg Lead Time</h4>
             </div>
+            <p className="text-2xl font-semibold">{performanceMetrics.avgLeadTime}h</p>
+            <p className="text-xs text-muted-foreground">Before disruption</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <DollarSign className="h-4 w-4 text-green-600" />
+              <h4 className="text-sm font-medium">Cost Savings</h4>
+            </div>
+            <p className="text-2xl font-semibold">AED {(performanceMetrics.costSavings / 1000000).toFixed(1)}M</p>
+            <p className="text-xs text-muted-foreground">From predictions</p>
           </CardContent>
         </Card>
       </div>
 
-      <Tabs defaultValue="performance" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="performance" className="pb-3">Performance</TabsTrigger>
-          <TabsTrigger value="trends" className="pb-3">Trends</TabsTrigger>
-          <TabsTrigger value="causes" className="pb-3">Cause Analysis</TabsTrigger>
-          <TabsTrigger value="routes" className="pb-3">Route Performance</TabsTrigger>
-          <TabsTrigger value="impact" className="pb-3">Business Impact</TabsTrigger>
+      <Tabs defaultValue="causes" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="causes">Disruption Causes</TabsTrigger>
+          <TabsTrigger value="routes">Route Performance</TabsTrigger>
+          <TabsTrigger value="time">Time Analysis</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="performance" className="space-y-6">
-          {/* Detailed Performance Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Model Performance Breakdown</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Accuracy</span>
-                  <div className="flex items-center gap-2">
-                    <Progress value={modelPerformance.accuracy} className="w-20" />
-                    <span className="font-semibold">{modelPerformance.accuracy}%</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Precision</span>
-                  <div className="flex items-center gap-2">
-                    <Progress value={modelPerformance.precision} className="w-20" />
-                    <span className="font-semibold">{modelPerformance.precision}%</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Recall</span>
-                  <div className="flex items-center gap-2">
-                    <Progress value={modelPerformance.recall} className="w-20" />
-                    <span className="font-semibold">{modelPerformance.recall}%</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">F1 Score</span>
-                  <div className="flex items-center gap-2">
-                    <Progress value={modelPerformance.f1Score} className="w-20" />
-                    <span className="font-semibold">{modelPerformance.f1Score}%</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Prediction Results</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
-                    <p className="text-2xl font-semibold text-green-700">{modelPerformance.correctPredictions}</p>
-                    <p className="text-sm text-green-600">Correct Predictions</p>
-                  </div>
-                  <div className="text-center p-4 bg-red-50 rounded-lg border border-red-200">
-                    <p className="text-2xl font-semibold text-red-700">{modelPerformance.falsePositives + modelPerformance.falseNegatives}</p>
-                    <p className="text-sm text-red-600">Incorrect Predictions</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                    <p className="font-semibold text-yellow-700">{modelPerformance.falsePositives}</p>
-                    <p className="text-xs text-yellow-600">False Positives</p>
-                  </div>
-                  <div className="text-center p-3 bg-orange-50 rounded-lg border border-orange-200">
-                    <p className="font-semibold text-orange-700">{modelPerformance.falseNegatives}</p>
-                    <p className="text-xs text-orange-600">False Negatives</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Time-based Performance */}
+        <TabsContent value="causes" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Performance by Time of Day</CardTitle>
+              <CardTitle>Prediction Accuracy by Disruption Cause</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {timePerformance.map((slot, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-4">
-                      <Clock className="h-5 w-5 text-muted-foreground" />
-                      <div>
-                        <p className="font-medium">{slot.timeSlot}</p>
-                        <p className="text-sm text-muted-foreground">{slot.predictions} predictions</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-6">
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Accuracy</p>
-                        <p className="font-semibold">{slot.accuracy}%</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Avg Delay</p>
-                        <p className="font-semibold">{slot.avgDelay} min</p>
-                      </div>
-                      <Progress value={slot.accuracy} className="w-20" />
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Cause</TableHead>
+                    <TableHead>Predictions</TableHead>
+                    <TableHead>Accuracy</TableHead>
+                    <TableHead>Impact Level</TableHead>
+                    <TableHead>Trend</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {causeAnalysis.map((cause, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium">{cause.cause}</TableCell>
+                      <TableCell>{cause.predictions}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Progress value={cause.accuracy} className="w-16 h-2" />
+                          <span className="text-sm">{cause.accuracy}%</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={
+                          cause.impact === 'Very High' ? 'bg-red-100 text-red-800' :
+                          cause.impact === 'High' ? 'bg-orange-100 text-orange-800' :
+                          cause.impact === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-green-100 text-green-800'
+                        }>
+                          {cause.impact}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          {cause.trend === 'increasing' ? (
+                            <TrendingUp className="h-4 w-4 text-red-600" />
+                          ) : cause.trend === 'decreasing' ? (
+                            <TrendingDown className="h-4 w-4 text-green-600" />
+                          ) : (
+                            <Activity className="h-4 w-4 text-gray-600" />
+                          )}
+                          <span className="text-sm capitalize">{cause.trend}</span>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="trends" className="space-y-6">
+        <TabsContent value="routes" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Performance Trends Over Time</CardTitle>
+              <CardTitle>Route-Specific Prediction Performance</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {trendData.map((week, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div>
-                      <p className="font-medium">{week.period}</p>
-                      <p className="text-sm text-muted-foreground">{week.predictions} predictions</p>
-                    </div>
-                    <div className="flex items-center gap-6">
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Accuracy</p>
-                        <p className="font-semibold">{week.accuracy}%</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Prevented</p>
-                        <p className="font-semibold text-green-600">{week.prevented}</p>
-                      </div>
-                      <Progress value={week.accuracy} className="w-24" />
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Route</TableHead>
+                    <TableHead>Predictions</TableHead>
+                    <TableHead>Accuracy</TableHead>
+                    <TableHead>Avg Lead Time</TableHead>
+                    <TableHead>Cost Saved</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {routePerformance.map((route, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium">{route.route}</TableCell>
+                      <TableCell>{route.predictions}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Progress value={route.accuracy} className="w-16 h-2" />
+                          <span className="text-sm">{route.accuracy}%</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>{route.avgLeadTime}h</TableCell>
+                      <TableCell className="font-medium text-green-600">
+                        AED {(route.costSaved / 1000).toFixed(0)}K
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="causes" className="space-y-6">
+        <TabsContent value="time" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Prediction Accuracy by Cause</CardTitle>
+              <CardTitle>Time-Based Prediction Analysis</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {causeAnalysis.map((cause, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-4">
-                      <AlertTriangle className="h-5 w-5 text-muted-foreground" />
-                      <div>
-                        <p className="font-medium">{cause.cause}</p>
-                        <p className="text-sm text-muted-foreground">{cause.predictions} predictions</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-6">
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Accuracy</p>
-                        <p className="font-semibold">{cause.accuracy}%</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Impact</p>
-                        <p className={`font-semibold ${getImpactColor(cause.impact)}`}>{cause.impact}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Trend</p>
-                        <p className="font-semibold">{getTrendIndicator(cause.trend)}</p>
-                      </div>
-                      <Progress value={cause.accuracy} className="w-20" />
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Time Slot</TableHead>
+                    <TableHead>Predictions</TableHead>
+                    <TableHead>Accuracy</TableHead>
+                    <TableHead>Avg Delay</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {timePerformance.map((slot, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium">{slot.timeSlot}</TableCell>
+                      <TableCell>{slot.predictions}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Progress value={slot.accuracy} className="w-16 h-2" />
+                          <span className="text-sm">{slot.accuracy}%</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>{slot.avgDelay} min</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
-        </TabsContent>
-
-        <TabsContent value="routes" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Route-Specific Performance</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {routePerformance.map((route, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div>
-                      <p className="font-medium font-mono">{route.route}</p>
-                      <p className="text-sm text-muted-foreground">{route.predictions} predictions</p>
-                    </div>
-                    <div className="flex items-center gap-6">
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Accuracy</p>
-                        <p className="font-semibold">{route.accuracy}%</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Lead Time</p>
-                        <p className="font-semibold">{route.avgLeadTime}h</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Cost Saved</p>
-                        <p className="font-semibold text-green-600">${(route.costSaved / 1000).toFixed(0)}K</p>
-                      </div>
-                      <Progress value={route.accuracy} className="w-20" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="impact" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
-              <CardContent className="p-6 text-center">
-                <TrendingUp className="h-8 w-8 text-green-600 mx-auto mb-3" />
-                <p className="text-3xl font-semibold text-green-700">${impactMetrics.totalCostSaved}M</p>
-                <p className="text-sm text-green-600">Total Cost Savings</p>
-                <p className="text-xs text-muted-foreground mt-1">Last 90 days</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
-              <CardContent className="p-6 text-center">
-                <CheckCircle className="h-8 w-8 text-blue-600 mx-auto mb-3" />
-                <p className="text-3xl font-semibold text-blue-700">{impactMetrics.disruptionsPrevented}</p>
-                <p className="text-sm text-blue-600">Disruptions Prevented</p>
-                <p className="text-xs text-muted-foreground mt-1">Through early intervention</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
-              <CardContent className="p-6 text-center">
-                <Target className="h-8 w-8 text-purple-600 mx-auto mb-3" />
-                <p className="text-3xl font-semibold text-purple-700">{impactMetrics.passengersProtected.toLocaleString()}</p>
-                <p className="text-sm text-purple-600">Passengers Protected</p>
-                <p className="text-xs text-muted-foreground mt-1">From disruptions</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Operational Efficiency</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span>Average Response Time</span>
-                  <span className="font-semibold">{impactMetrics.avgResponseTime} minutes</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Efficiency Improvement</span>
-                  <span className="font-semibold text-green-600">+{impactMetrics.operationalEfficiency}%</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Prevention Rate</span>
-                  <span className="font-semibold">{((impactMetrics.disruptionsPrevented / modelPerformance.totalPredictions) * 100).toFixed(1)}%</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>ROI Analysis</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
-                  <p className="text-2xl font-semibold text-green-700">487%</p>
-                  <p className="text-sm text-green-600">Return on Investment</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <p className="font-semibold">$2.8M</p>
-                    <p className="text-xs text-muted-foreground">Benefits</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="font-semibold">$0.58M</p>
-                    <p className="text-xs text-muted-foreground">Investment</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
         </TabsContent>
       </Tabs>
     </div>

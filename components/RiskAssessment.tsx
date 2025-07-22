@@ -39,461 +39,245 @@ export function RiskAssessment() {
   const overallRiskScore = 7.3
   const riskTrend = 'increasing' // increasing, decreasing, stable
 
-  const criticalRiskFactors = [
+  const riskFactors = [
     {
-      id: 1,
-      name: 'Severe Weather System',
+      id: 'weather-dxb',
+      name: 'Weather Conditions - DXB',
       category: 'Weather',
-      severity: 'Critical',
-      probability: 92,
-      impact: 'Very High',
-      affected: {
-        flights: 34,
-        passengers: 8947,
-        routes: ['JFK-DXB', 'EWR-DXB', 'BOS-DXB']
-      },
-      timeline: '2-6 hours',
-      description: 'Major thunderstorm system approaching Northeast US airports',
-      mitigation: 'Pre-positioning aircraft, crew scheduling adjustments',
-      trend: 'increasing',
-      riskScore: 9.2
-    },
-    {
-      id: 2,
-      name: 'Aircraft Maintenance Overrun',
-      category: 'Maintenance',
       severity: 'High',
-      probability: 78,
-      impact: 'High',
-      affected: {
-        flights: 12,
-        passengers: 3456,
-        routes: ['LHR-DXB', 'CDG-DXB']
-      },
-      timeline: '4-8 hours',
-      description: 'C-check maintenance on A6-EUA may extend beyond scheduled window',
-      mitigation: 'Alternative aircraft assignment, passenger rebooking',
-      trend: 'stable',
-      riskScore: 8.1
+      probability: 85,
+      impact: 9.2,
+      description: 'Sandstorm approaching Dubai with visibility < 1km expected',
+      timeToImpact: '2.5 hours',
+      affectedFlights: 18,
+      mitigationStatus: 'Active',
+      icon: CloudRain
     },
     {
-      id: 3,
+      id: 'atc-delays',
       name: 'ATC Slot Restrictions',
       category: 'Air Traffic',
       severity: 'Medium',
       probability: 65,
-      impact: 'Medium',
-      affected: {
-        flights: 18,
-        passengers: 4523,
-        routes: ['FRA-DXB', 'MUC-DXB', 'ZUR-DXB']
-      },
-      timeline: '6-12 hours',
-      description: 'European ATC implementing flow control measures',
-      mitigation: 'Route optimization, delay minimization strategies',
-      trend: 'decreasing',
-      riskScore: 6.4
+      impact: 6.8,
+      description: 'European airspace congestion affecting departure slots',
+      timeToImpact: '4.2 hours',
+      affectedFlights: 12,
+      mitigationStatus: 'Monitoring',
+      icon: Radio
     },
     {
-      id: 4,
-      name: 'Crew Duty Time Limits',
-      category: 'Crew',
+      id: 'maintenance-737',
+      name: 'Fleet Maintenance Window',
+      category: 'Maintenance',
       severity: 'Medium',
-      probability: 71,
-      impact: 'Medium',
-      affected: {
-        flights: 8,
-        passengers: 2134,
-        routes: ['SYD-DXB', 'MEL-DXB']
-      },
-      timeline: '8-16 hours',
-      description: 'Multiple crew members approaching maximum duty time',
-      mitigation: 'Reserve crew activation, schedule adjustments',
-      trend: 'increasing',
-      riskScore: 6.8
-    }
-  ]
-
-  const riskCategories = [
-    {
-      category: 'Weather',
-      count: 15,
-      avgSeverity: 8.2,
-      trend: 'increasing',
-      topRisk: 'Thunderstorms at JFK',
-      affectedFlights: 47
+      probability: 40,
+      impact: 7.5,
+      description: 'Scheduled A-checks reducing available aircraft',
+      timeToImpact: '6.0 hours',
+      affectedFlights: 8,
+      mitigationStatus: 'Planned',
+      icon: Wrench
     },
     {
-      category: 'Maintenance',
-      count: 8,
-      avgSeverity: 7.1,
-      trend: 'stable',
-      topRisk: 'C-check overrun',
-      affectedFlights: 23
-    },
-    {
-      category: 'Air Traffic',
-      count: 12,
-      avgSeverity: 6.4,
-      trend: 'decreasing',
-      topRisk: 'European flow control',
-      affectedFlights: 31
-    },
-    {
+      id: 'crew-shortage',
+      name: 'Crew Availability',
       category: 'Crew',
-      count: 6,
-      avgSeverity: 6.8,
-      trend: 'increasing',
-      topRisk: 'Duty time limits',
-      affectedFlights: 15
-    },
-    {
-      category: 'Ground Operations',
-      count: 4,
-      avgSeverity: 5.2,
-      trend: 'stable',
-      topRisk: 'Ground handling delays',
-      affectedFlights: 9
+      severity: 'Low',
+      probability: 25,
+      impact: 5.2,
+      description: 'Limited crew reserves for extended operations',
+      timeToImpact: '8.5 hours',
+      affectedFlights: 4,
+      mitigationStatus: 'Standby',
+      icon: Users
     }
   ]
 
-  const mitigationActions = [
-    {
-      id: 1,
-      action: 'Pre-position Aircraft at Alternate Airports',
-      category: 'Weather',
-      status: 'In Progress',
-      effectiveness: 85,
-      costImpact: 45000,
-      timeline: '2 hours',
-      assignedTo: 'Operations Team A'
-    },
-    {
-      id: 2,
-      action: 'Activate Reserve Crew Pool',
-      category: 'Crew',
-      status: 'Planned',
-      effectiveness: 92,
-      costImpact: 28000,
-      timeline: '4 hours',
-      assignedTo: 'Crew Scheduling'
-    },
-    {
-      id: 3,
-      action: 'Implement Alternative Routing',
-      category: 'Air Traffic',
-      status: 'Active',
-      effectiveness: 78,
-      costImpact: 12000,
-      timeline: '1 hour',
-      assignedTo: 'Flight Planning'
-    },
-    {
-      id: 4,
-      action: 'Expedite Maintenance Procedures',
-      category: 'Maintenance',
-      status: 'In Progress',
-      effectiveness: 65,
-      costImpact: 67000,
-      timeline: '6 hours',
-      assignedTo: 'Maintenance Team'
-    }
+  const routeRisks = [
+    { route: 'DXB-JFK', riskScore: 8.5, factors: ['Weather', 'ATC'], flights: 3 },
+    { route: 'DXB-LHR', riskScore: 7.2, factors: ['ATC', 'Crew'], flights: 4 },
+    { route: 'DXB-BOM', riskScore: 6.8, factors: ['Weather'], flights: 6 },
+    { route: 'DXB-DEL', riskScore: 6.1, factors: ['Weather'], flights: 5 },
+    { route: 'DXB-KHI', riskScore: 4.9, factors: ['Maintenance'], flights: 2 }
   ]
 
-  const riskTimeline = [
-    { time: '14:00', riskScore: 6.8, events: ['Weather system detected'] },
-    { time: '15:00', riskScore: 7.1, events: ['ATC restrictions announced'] },
-    { time: '16:00', riskScore: 7.5, events: ['Maintenance issue identified'] },
-    { time: '17:00', riskScore: 7.3, events: ['Mitigation actions started'] },
-    { time: '18:00', riskScore: 7.3, events: ['Current status'] }
+  const historicalTrends = [
+    { date: '2025-01-10', riskScore: 7.3, incidents: 3 },
+    { date: '2025-01-09', riskScore: 6.8, incidents: 2 },
+    { date: '2025-01-08', riskScore: 5.9, incidents: 1 },
+    { date: '2025-01-07', riskScore: 6.4, incidents: 2 },
+    { date: '2025-01-06', riskScore: 7.1, incidents: 4 }
   ]
 
-  const getSeverityColor = (severity) => {
+  const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'Critical': return 'bg-red-100 text-red-700 border-red-200'
-      case 'High': return 'bg-orange-100 text-orange-700 border-orange-200'
-      case 'Medium': return 'bg-yellow-100 text-yellow-700 border-yellow-200'
-      case 'Low': return 'bg-green-100 text-green-700 border-green-200'
-      default: return 'bg-gray-100 text-gray-700 border-gray-200'
+      case 'High': return 'bg-red-100 text-red-800 border-red-200'
+      case 'Medium': return 'bg-orange-100 text-orange-800 border-orange-200'
+      case 'Low': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+      default: return 'bg-gray-100 text-gray-800 border-gray-200'
     }
   }
 
-  const getTrendIcon = (trend) => {
-    switch (trend) {
-      case 'increasing': return <TrendingUp className="h-4 w-4 text-red-500" />
-      case 'decreasing': return <TrendingDown className="h-4 w-4 text-green-500" />
-      default: return <Minus className="h-4 w-4 text-gray-500" />
-    }
-  }
-
-  const getCategoryIcon = (category) => {
-    switch (category) {
-      case 'Weather': return <CloudRain className="h-5 w-5" />
-      case 'Maintenance': return <Wrench className="h-5 w-5" />
-      case 'Air Traffic': return <Radio className="h-5 w-5" />
-      case 'Crew': return <Users className="h-5 w-5" />
-      case 'Ground Operations': return <MapPin className="h-5 w-5" />
-      default: return <AlertTriangle className="h-5 w-5" />
-    }
-  }
-
-  const getStatusColor = (status) => {
+  const getMitigationColor = (status: string) => {
     switch (status) {
-      case 'Active': return 'bg-green-100 text-green-700'
-      case 'In Progress': return 'bg-blue-100 text-blue-700'
-      case 'Planned': return 'bg-yellow-100 text-yellow-700'
-      default: return 'bg-gray-100 text-gray-700'
+      case 'Active': return 'bg-blue-100 text-blue-800'
+      case 'Monitoring': return 'bg-orange-100 text-orange-800'
+      case 'Planned': return 'bg-green-100 text-green-800'
+      case 'Standby': return 'bg-gray-100 text-gray-800'
+      default: return 'bg-gray-100 text-gray-800'
     }
   }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold">Risk Assessment</h2>
-          <p className="text-muted-foreground">Comprehensive risk analysis and mitigation planning for flight operations</p>
+          <h2 className="text-2xl font-semibold text-flydubai-navy">Risk Assessment</h2>
+          <p className="text-muted-foreground">Real-time operational risk monitoring and mitigation</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex gap-2">
           <Select value={timeframe} onValueChange={setTimeframe}>
             <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="6h">Next 6h</SelectItem>
-              <SelectItem value="12h">Next 12h</SelectItem>
               <SelectItem value="24h">Next 24h</SelectItem>
               <SelectItem value="48h">Next 48h</SelectItem>
+              <SelectItem value="7d">Next 7 days</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" size="sm">
+          <Button variant="outline">
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
-          <Button variant="outline" size="sm">
+          <Button className="btn-flydubai-primary">
             <Download className="h-4 w-4 mr-2" />
-            Export
+            Risk Report
           </Button>
         </div>
       </div>
 
-      {/* Risk Alert */}
-      <Alert className="border-red-200 bg-red-50">
-        <AlertTriangle className="h-4 w-4 text-red-600" />
-        <AlertDescription className="text-red-800">
-          <strong>High Risk Alert:</strong> Overall risk score is {overallRiskScore}/10. {criticalRiskFactors.filter(r => r.severity === 'Critical').length} critical risk factors detected requiring immediate attention.
-        </AlertDescription>
-      </Alert>
-
       {/* Overall Risk Score */}
-      <Card className="bg-gradient-to-r from-red-50 to-orange-50 border-red-200">
+      <Card className="border-orange-200 bg-orange-50">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-red-200 rounded-lg">
-                <Shield className="h-8 w-8 text-red-700" />
+              <div className="relative">
+                <Shield className="h-12 w-12 text-orange-600" />
+                <div className="absolute inset-0 bg-orange-600 rounded-full opacity-10 blur-sm"></div>
               </div>
               <div>
-                <h3 className="text-2xl font-semibold text-red-900">Risk Score: {overallRiskScore}/10</h3>
-                <p className="text-red-700">Current operational risk level</p>
-                <div className="flex items-center gap-2 mt-1">
-                  {getTrendIcon(riskTrend)}
-                  <span className="text-sm text-red-600 capitalize">{riskTrend} trend</span>
-                </div>
+                <h3 className="text-2xl font-semibold text-orange-800">Risk Score: {overallRiskScore}/10</h3>
+                <p className="text-orange-700">
+                  Current operational risk level - {overallRiskScore >= 8 ? 'High' : overallRiskScore >= 6 ? 'Medium' : 'Low'} Risk
+                </p>
               </div>
             </div>
             <div className="text-right">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center">
-                  <p className="text-lg font-semibold text-red-700">{criticalRiskFactors.length}</p>
-                  <p className="text-xs text-red-600">Active Risks</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-lg font-semibold text-red-700">{criticalRiskFactors.reduce((sum, r) => sum + r.affected.flights, 0)}</p>
-                  <p className="text-xs text-red-600">Flights at Risk</p>
-                </div>
+              <div className="flex items-center gap-2 mb-2">
+                {riskTrend === 'increasing' ? (
+                  <ArrowUp className="h-4 w-4 text-red-600" />
+                ) : riskTrend === 'decreasing' ? (
+                  <ArrowDown className="h-4 w-4 text-green-600" />
+                ) : (
+                  <Minus className="h-4 w-4 text-gray-600" />
+                )}
+                <span className="text-sm font-medium capitalize text-orange-800">{riskTrend}</span>
               </div>
+              <p className="text-sm text-orange-700">vs. 24h ago</p>
             </div>
-          </div>
-          <div className="mt-4">
-            <Progress value={overallRiskScore * 10} className="h-3" />
           </div>
         </CardContent>
       </Card>
 
-      <Tabs defaultValue="factors" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 pb-1 pt-2 mb-[10px]">
-          <TabsTrigger value="factors" className="pb-3 pt-1">Risk Factors</TabsTrigger>
-          <TabsTrigger value="categories" className="pb-3 pt-1">Categories</TabsTrigger>
-          <TabsTrigger value="mitigation" className="pb-3 pt-1">Mitigation</TabsTrigger>
-          <TabsTrigger value="timeline" className="pb-3 pt-1">Timeline</TabsTrigger>
+      {/* Active Risk Alerts */}
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold">Active Risk Factors</h3>
+        {riskFactors.map((risk) => {
+          const IconComponent = risk.icon
+          return (
+            <Alert key={risk.id} className={`${risk.severity === 'High' ? 'border-red-200 bg-red-50' : risk.severity === 'Medium' ? 'border-orange-200 bg-orange-50' : 'border-yellow-200 bg-yellow-50'}`}>
+              <div className="flex items-start gap-4 w-full">
+                <IconComponent className={`h-5 w-5 mt-0.5 ${risk.severity === 'High' ? 'text-red-600' : risk.severity === 'Medium' ? 'text-orange-600' : 'text-yellow-600'}`} />
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium">{risk.name}</h4>
+                    <div className="flex items-center gap-2">
+                      <Badge className={getSeverityColor(risk.severity)}>
+                        {risk.severity} Risk
+                      </Badge>
+                      <Badge className={getMitigationColor(risk.mitigationStatus)}>
+                        {risk.mitigationStatus}
+                      </Badge>
+                    </div>
+                  </div>
+                  <AlertDescription className="mb-3">
+                    {risk.description}
+                  </AlertDescription>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <span className="text-muted-foreground">Probability:</span>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Progress value={risk.probability} className="w-16 h-2" />
+                        <span className="font-medium">{risk.probability}%</span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Impact:</span>
+                      <p className="font-medium">{risk.impact}/10</p>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Time to Impact:</span>
+                      <p className="font-medium">{risk.timeToImpact}</p>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Affected Flights:</span>
+                      <p className="font-medium">{risk.affectedFlights}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Alert>
+          )
+        })}
+      </div>
+
+      <Tabs defaultValue="routes" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="routes">Route Risk Analysis</TabsTrigger>
+          <TabsTrigger value="trends">Historical Trends</TabsTrigger>
+          <TabsTrigger value="mitigation">Mitigation Actions</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="factors" className="space-y-6">
-          <div className="space-y-4">
-            {criticalRiskFactors.map((risk) => (
-              <Card key={risk.id} className="border-l-4 border-l-red-400">
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-start gap-4">
-                      {getCategoryIcon(risk.category)}
+        <TabsContent value="routes" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>High-Risk Routes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {routeRisks.map((route, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
+                    <div className="flex items-center gap-4">
+                      <Plane className="h-5 w-5 text-flydubai-blue" />
                       <div>
-                        <h4 className="font-semibold text-lg">{risk.name}</h4>
-                        <p className="text-muted-foreground">{risk.description}</p>
-                        <div className="flex items-center gap-4 mt-2">
-                          <Badge className={getSeverityColor(risk.severity)}>
-                            {risk.severity}
-                          </Badge>
-                          <span className="text-sm text-muted-foreground">Timeline: {risk.timeline}</span>
-                          <div className="flex items-center gap-1">
-                            {getTrendIcon(risk.trend)}
-                            <span className="text-sm capitalize">{risk.trend}</span>
-                          </div>
+                        <h4 className="font-medium">{route.route}</h4>
+                        <div className="flex items-center gap-2 mt-1">
+                          {route.factors.map((factor, idx) => (
+                            <Badge key={idx} variant="outline" className="text-xs">
+                              {factor}
+                            </Badge>
+                          ))}
                         </div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="bg-red-100 rounded-lg p-3 mb-2">
-                        <p className="text-2xl font-semibold text-red-700">{risk.riskScore}</p>
-                        <p className="text-xs text-red-600">Risk Score</p>
+                      <div className="flex items-center gap-2 mb-1">
+                        <Progress value={route.riskScore * 10} className="w-20 h-2" />
+                        <span className="font-medium">{route.riskScore}/10</span>
                       </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <h5 className="font-medium mb-3">Risk Metrics</h5>
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm">Probability</span>
-                          <div className="flex items-center gap-2">
-                            <Progress value={risk.probability} className="w-20" />
-                            <span className="font-semibold">{risk.probability}%</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm">Impact Level</span>
-                          <span className="font-semibold">{risk.impact}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h5 className="font-medium mb-3">Affected Operations</h5>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm">Flights</span>
-                          <span className="font-semibold">{risk.affected.flights}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm">Passengers</span>
-                          <span className="font-semibold">{risk.affected.passengers.toLocaleString()}</span>
-                        </div>
-                        <div className="text-sm">
-                          <span className="text-muted-foreground">Routes:</span>
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {risk.affected.routes.map((route, index) => (
-                              <Badge key={index} variant="outline" className="text-xs">
-                                {route}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                    <h6 className="font-medium text-blue-900 mb-1">Mitigation Strategy</h6>
-                    <p className="text-sm text-blue-800">{risk.mitigation}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="categories" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {riskCategories.map((category, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    {getCategoryIcon(category.category)}
-                    <div>
-                      <h4 className="font-semibold">{category.category}</h4>
-                      <p className="text-sm text-muted-foreground">{category.count} active risks</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">Avg Severity</span>
-                      <div className="flex items-center gap-2">
-                        <Progress value={category.avgSeverity * 10} className="w-16" />
-                        <span className="font-semibold">{category.avgSeverity}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">Trend</span>
-                      <div className="flex items-center gap-1">
-                        {getTrendIcon(category.trend)}
-                        <span className="text-sm capitalize">{category.trend}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">Affected Flights</span>
-                      <span className="font-semibold">{category.affectedFlights}</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                    <p className="text-sm font-medium">Top Risk:</p>
-                    <p className="text-sm text-muted-foreground">{category.topRisk}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="mitigation" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Active Mitigation Actions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {mitigationActions.map((action) => (
-                  <div key={action.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-4">
-                      <div className="p-2 bg-blue-100 rounded-lg">
-                        <Zap className="h-5 w-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <h5 className="font-medium">{action.action}</h5>
-                        <p className="text-sm text-muted-foreground">Category: {action.category}</p>
-                        <p className="text-sm text-muted-foreground">Assigned to: {action.assignedTo}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-6">
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Effectiveness</p>
-                        <p className="font-semibold">{action.effectiveness}%</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Cost Impact</p>
-                        <p className="font-semibold">${(action.costImpact / 1000).toFixed(0)}K</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Timeline</p>
-                        <p className="font-semibold">{action.timeline}</p>
-                      </div>
-                      <Badge className={getStatusColor(action.status)}>
-                        {action.status}
-                      </Badge>
+                      <p className="text-sm text-muted-foreground">{route.flights} flights affected</p>
                     </div>
                   </div>
                 ))}
@@ -502,34 +286,62 @@ export function RiskAssessment() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="timeline" className="space-y-6">
+        <TabsContent value="trends" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Risk Score Timeline</CardTitle>
+              <CardTitle>Risk Score Trends</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {riskTimeline.map((entry, index) => (
-                  <div key={index} className="flex items-center gap-4 p-4 border rounded-lg">
-                    <div className="text-center min-w-0">
-                      <Clock className="h-5 w-5 text-muted-foreground mx-auto mb-1" />
-                      <p className="font-mono text-sm">{entry.time}</p>
+                {historicalTrends.map((trend, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 border-b last:border-b-0">
+                    <div>
+                      <p className="font-medium">{trend.date}</p>
+                      <p className="text-sm text-muted-foreground">{trend.incidents} incidents reported</p>
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="font-semibold">Risk Score: {entry.riskScore}</span>
-                        <Progress value={entry.riskScore * 10} className="w-24" />
-                      </div>
-                      <div className="flex flex-wrap gap-1">
-                        {entry.events.map((event, eventIndex) => (
-                          <Badge key={eventIndex} variant="outline" className="text-xs">
-                            {event}
-                          </Badge>
-                        ))}
+                    <div className="text-right">
+                      <div className="flex items-center gap-2">
+                        <Progress value={trend.riskScore * 10} className="w-20 h-2" />
+                        <span className="font-medium">{trend.riskScore}/10</span>
                       </div>
                     </div>
                   </div>
                 ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="mitigation" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Recommended Mitigation Actions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <Alert className="border-blue-200 bg-blue-50">
+                  <Zap className="h-4 w-4 text-blue-600" />
+                  <AlertDescription className="text-blue-800">
+                    <strong>Immediate Action:</strong> Activate weather contingency plans for DXB operations. 
+                    Consider pre-positioning aircraft at alternate airports.
+                  </AlertDescription>
+                </Alert>
+
+                <Alert className="border-orange-200 bg-orange-50">
+                  <Clock className="h-4 w-4 text-orange-600" />
+                  <AlertDescription className="text-orange-800">
+                    <strong>Within 2 hours:</strong> Coordinate with European ATC for alternative routing options. 
+                    Notify passengers of potential delays.
+                  </AlertDescription>
+                </Alert>
+
+                <Alert className="border-green-200 bg-green-50">
+                  <Activity className="h-4 w-4 text-green-600" />
+                  <AlertDescription className="text-green-800">
+                    <strong>Preventive:</strong> Review crew scheduling for next 48 hours. 
+                    Consider repositioning reserves to high-risk stations.
+                  </AlertDescription>
+                </Alert>
               </div>
             </CardContent>
           </Card>
