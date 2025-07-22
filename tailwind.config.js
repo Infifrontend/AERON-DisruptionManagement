@@ -1,16 +1,19 @@
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
     "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+    "./app/**/*.{js,ts,jsx,tsx}",
     "./**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        'flydubai-blue': '#1f4788',
-        'flydubai-navy': '#0f2a5a',
-        'flydubai-orange': '#ff8200',
+        'flydubai-navy': '#003366',
+        'flydubai-gold': '#D4A574',
+        'flydubai-light-blue': '#E6F3FF',
+        'flydubai-dark-blue': '#001122',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -44,10 +47,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-      },
-      backgroundImage: {
-        'gradient-flydubai': 'linear-gradient(135deg, #1f4788 0%, #ff8200 100%)',
-        'gradient-flydubai-light': 'linear-gradient(135deg, #f0f7ff 0%, #fff5e6 100%)',
       },
       borderRadius: {
         lg: "var(--radius)",

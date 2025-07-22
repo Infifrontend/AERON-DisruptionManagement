@@ -25,6 +25,151 @@ import {
   Utensils
 } from 'lucide-react'
 
+export function VoucherManagement() {
+  const [selectedVoucherType, setSelectedVoucherType] = useState('')
+  const [selectedPassengers, setSelectedPassengers] = useState<string[]>([])
+
+  const passengerList = [
+    { id: 'PAX001', name: 'Ahmed Al-Mansoori', seatClass: 'Business', status: 'Affected' },
+    { id: 'PAX002', name: 'Sarah Johnson', seatClass: 'Economy', status: 'Affected' },
+    { id: 'PAX003', name: 'Mohammed Hassan', seatClass: 'First', status: 'Affected' }
+  ]
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-flydubai-navy">Voucher Management</h2>
+        <Button className="bg-flydubai-gold hover:bg-flydubai-gold/90 text-white">
+          <Download className="h-4 w-4 mr-2" />
+          Export Report
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Receipt className="h-5 w-5" />
+                Generate Vouchers
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="voucher-type">Voucher Type</Label>
+                  <Select value={selectedVoucherType} onValueChange={setSelectedVoucherType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select voucher type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="meal">
+                        <div className="flex items-center gap-2">
+                          <Utensils className="h-4 w-4" />
+                          Meal Voucher
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="accommodation">
+                        <div className="flex items-center gap-2">
+                          <UtensilsCrossed className="h-4 w-4" />
+                          Accommodation
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="transportation">
+                        <div className="flex items-center gap-2">
+                          <CreditCard className="h-4 w-4" />
+                          Transportation
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="amount">Amount (AED)</Label>
+                  <Input type="number" placeholder="Enter amount" />
+                </div>
+              </div>
+
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-12">Select</TableHead>
+                    <TableHead>Passenger</TableHead>
+                    <TableHead>Class</TableHead>
+                    <TableHead>Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {passengerList.map((passenger) => (
+                    <TableRow key={passenger.id}>
+                      <TableCell>
+                        <Checkbox
+                          checked={selectedPassengers.includes(passenger.id)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setSelectedPassengers([...selectedPassengers, passenger.id])
+                            } else {
+                              setSelectedPassengers(selectedPassengers.filter(id => id !== passenger.id))
+                            }
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell>{passenger.name}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{passenger.seatClass}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="destructive">{passenger.status}</Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+
+              <Button className="w-full bg-flydubai-navy hover:bg-flydubai-navy/90">
+                <Send className="h-4 w-4 mr-2" />
+                Generate & Send Vouchers
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Voucher Summary</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex justify-between">
+                  <span>Total Passengers:</span>
+                  <span className="font-bold">{passengerList.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Selected:</span>
+                  <span className="font-bold">{selectedPassengers.length}</span>
+                </div>
+                <Separator />
+                <div className="flex justify-between text-lg font-bold">
+                  <span>Estimated Cost:</span>
+                  <span>AED 2,400</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Alert>
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>
+              Vouchers will be sent via email and SMS to affected passengers within 15 minutes.
+            </AlertDescription>
+          </Alert>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const voucherTypes = [
   {
     id: 'meal',

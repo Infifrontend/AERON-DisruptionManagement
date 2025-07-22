@@ -25,6 +25,163 @@ import {
   Phone
 } from 'lucide-react'
 
+export function HotelBooking() {
+  const [selectedHotel, setSelectedHotel] = useState('')
+  const [checkInDate, setCheckInDate] = useState('')
+  const [checkOutDate, setCheckOutDate] = useState('')
+
+  const availableHotels = [
+    {
+      id: 'hotel1',
+      name: 'Dubai International Hotel',
+      rating: 4,
+      price: 450,
+      amenities: ['Wifi', 'Parking', 'Restaurant', 'Shuttle'],
+      distance: '5 min from DXB'
+    },
+    {
+      id: 'hotel2', 
+      name: 'Millennium Airport Hotel',
+      rating: 5,
+      price: 680,
+      amenities: ['Wifi', 'Spa', 'Restaurant', 'Shuttle', 'Pool'],
+      distance: '2 min from DXB'
+    }
+  ]
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-flydubai-navy">Hotel Booking</h2>
+        <Button variant="outline">
+          <CheckCircle className="h-4 w-4 mr-2" />
+          Confirm All Bookings
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Hotel className="h-5 w-5" />
+              Available Hotels
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {availableHotels.map((hotel) => (
+              <div key={hotel.id} className="border rounded-lg p-4 space-y-3">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-semibold">{hotel.name}</h3>
+                    <div className="flex items-center gap-1 mt-1">
+                      {[...Array(hotel.rating)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-bold">AED {hotel.price}</div>
+                    <div className="text-sm text-gray-600">per night</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <MapPin className="h-4 w-4" />
+                  {hotel.distance}
+                </div>
+                
+                <div className="flex flex-wrap gap-2">
+                  {hotel.amenities.map((amenity) => (
+                    <Badge key={amenity} variant="secondary" className="text-xs">
+                      {amenity}
+                    </Badge>
+                  ))}
+                </div>
+                
+                <Button 
+                  className="w-full" 
+                  variant={selectedHotel === hotel.id ? "default" : "outline"}
+                  onClick={() => setSelectedHotel(hotel.id)}
+                >
+                  {selectedHotel === hotel.id ? 'Selected' : 'Select Hotel'}
+                </Button>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Booking Details</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="checkin">Check-in Date</Label>
+                <Input
+                  type="date"
+                  value={checkInDate}
+                  onChange={(e) => setCheckInDate(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="checkout">Check-out Date</Label>
+                <Input
+                  type="date"
+                  value={checkOutDate}
+                  onChange={(e) => setCheckOutDate(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="rooms">Number of Rooms</Label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select rooms" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">1 Room</SelectItem>
+                  <SelectItem value="2">2 Rooms</SelectItem>
+                  <SelectItem value="3">3 Rooms</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <Separator />
+            
+            <div className="space-y-2">
+              <h4 className="font-semibold">Passenger Information</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Ahmed Al-Mansoori</span>
+                  <Badge>Business</Badge>
+                </div>
+                <div className="flex justify-between">
+                  <span>Sarah Johnson</span>
+                  <Badge variant="outline">Economy</Badge>
+                </div>
+              </div>
+            </div>
+
+            <Alert>
+              <CheckCircle className="h-4 w-4" />
+              <AlertDescription>
+                Hotel shuttle service included. Passengers will be notified via SMS.
+              </AlertDescription>
+            </Alert>
+
+            <Button className="w-full bg-flydubai-navy hover:bg-flydubai-navy/90">
+              <Calendar className="h-4 w-4 mr-2" />
+              Confirm Booking
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
+
 const partnerHotels = [
   {
     id: 'HTL001',

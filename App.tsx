@@ -566,6 +566,7 @@ function DashboardScreen({ filters, setFilters, onCreateRecoveryPlan, setActiveS
       </div>
     </div>
   )
+)
 }
 
 function AuditLogsScreen() {

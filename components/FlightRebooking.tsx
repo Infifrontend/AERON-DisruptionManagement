@@ -23,6 +23,180 @@ import {
   FileText
 } from 'lucide-react'
 
+export function FlightRebooking() {
+  const [selectedFlight, setSelectedFlight] = useState('')
+  const [selectedPassengers, setSelectedPassengers] = useState<string[]>([])
+
+  const alternativeFlights = [
+    {
+      id: 'FZ125',
+      route: 'DXB → BOM',
+      departure: '08:30',
+      arrival: '12:45',
+      aircraft: 'Boeing 737-800',
+      seatsAvailable: 45,
+      price: 1250
+    },
+    {
+      id: 'FZ127',
+      route: 'DXB → BOM',
+      departure: '14:15',
+      arrival: '18:30',
+      aircraft: 'Boeing 737-MAX',
+      seatsAvailable: 32,
+      price: 1380
+    }
+  ]
+
+  const passengers = [
+    { id: 'PAX001', name: 'Ahmed Al-Mansoori', originalSeat: '3A', class: 'Business' },
+    { id: 'PAX002', name: 'Sarah Johnson', originalSeat: '15C', class: 'Economy' },
+    { id: 'PAX003', name: 'Mohammed Hassan', originalSeat: '1A', class: 'First' }
+  ]
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-flydubai-navy">Flight Rebooking</h2>
+        <Badge variant="destructive" className="px-3 py-1">
+          <AlertTriangle className="h-4 w-4 mr-1" />
+          Flight FZ123 Cancelled
+        </Badge>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Plane className="h-5 w-5" />
+              Alternative Flights
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {alternativeFlights.map((flight) => (
+              <div key={flight.id} className="border rounded-lg p-4 space-y-3">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-semibold text-lg">{flight.id}</h3>
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <MapPin className="h-4 w-4" />
+                      {flight.route}
+                    </div>
+                  </div>
+                  <Badge variant="outline">{flight.aircraft}</Badge>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    <span>Departure: {flight.departure}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    <span>Arrival: {flight.arrival}</span>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    <span className="text-sm">{flight.seatsAvailable} seats available</span>
+                  </div>
+                  <div className="text-lg font-bold">AED {flight.price}</div>
+                </div>
+                
+                <Button 
+                  className="w-full" 
+                  variant={selectedFlight === flight.id ? "default" : "outline"}
+                  onClick={() => setSelectedFlight(flight.id)}
+                >
+                  {selectedFlight === flight.id ? 'Selected' : 'Select Flight'}
+                </Button>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Passenger Selection</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-12">Select</TableHead>
+                  <TableHead>Passenger</TableHead>
+                  <TableHead>Original Seat</TableHead>
+                  <TableHead>Class</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {passengers.map((passenger) => (
+                  <TableRow key={passenger.id}>
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedPassengers.includes(passenger.id)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setSelectedPassengers([...selectedPassengers, passenger.id])
+                          } else {
+                            setSelectedPassengers(selectedPassengers.filter(id => id !== passenger.id))
+                          }
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell className="font-medium">{passenger.name}</TableCell>
+                    <TableCell>{passenger.originalSeat}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{passenger.class}</Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+
+            <Separator />
+            
+            <div className="space-y-3">
+              <h4 className="font-semibold">Rebooking Summary</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Selected Passengers:</span>
+                  <span className="font-medium">{selectedPassengers.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Selected Flight:</span>
+                  <span className="font-medium">{selectedFlight || 'None'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Additional Cost:</span>
+                  <span className="font-medium">AED 0</span>
+                </div>
+              </div>
+            </div>
+
+            <Alert>
+              <CheckCircle className="h-4 w-4" />
+              <AlertDescription>
+                Passengers will receive SMS and email confirmation for new booking.
+              </AlertDescription>
+            </Alert>
+
+            <Button 
+              className="w-full bg-flydubai-navy hover:bg-flydubai-navy/90"
+              disabled={!selectedFlight || selectedPassengers.length === 0}
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Confirm Rebooking
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
+
 const availableFlights = [
   {
     id: 'ALT001',
