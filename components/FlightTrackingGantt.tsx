@@ -398,4 +398,170 @@ export function FlightTrackingGantt() {
     status: 'all',
     route: 'all',
     search: ''
+  })
+
+  // Auto-refresh timer
+  const [autoRefresh, setAutoRefresh] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const ganttRef = useRef(null)
+  
+  // Filter aircraft based on current filters
+  const filteredAircraft = aircraftFleet.filter(aircraft => {
+    if (!showInactive && aircraft.status === 'maintenance') return false
+    if (filters.aircraftType !== 'all' && aircraft.type !== filters.aircraftType) return false
+    if (filters.status !== 'all' && aircraft.status !== filters.status) return false
+    if (filters.search && !aircraft.tailNumber.toLowerCase().includes(filters.search.toLowerCase()) &&
+        !aircraft.type.toLowerCase().includes(filters.search.toLowerCase())) return false
+    return true
+  })
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'on-time': return 'bg-green-500'
+      case 'delayed': return 'bg-yellow-500'
+      case 'cancelled': return 'bg-red-500'
+      case 'boarding': return 'bg-blue-500'
+      case 'departed': return 'bg-purple-500'
+      default: return 'bg-gray-500'
+    }
   }
+
+  const getStatusTextColor = (status) => {
+    switch (status) {
+      case 'on-time': return 'text-green-700'
+      case 'delayed': return 'text-yellow-700'
+      case 'cancelled': return 'text-red-700'
+      case 'boarding': return 'text-blue-700'
+      case 'departed': return 'text-purple-700'
+      default: return 'text-gray-700'
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Flight Tracking Gantt</h2>
+          <p className="text-gray-600">Real-time aircraft and flight visualization</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant={isPlaying ? "default" : "outline"}
+            size="sm"
+            onClick={() => setIsPlaying(!isPlaying)}
+          >
+            {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+          </Button>
+          <Button variant="outline" size="sm">
+            <RefreshCw className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <Card>
+        <CardContent className="p-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label className="text-sm font-medium mb-2 block">Aircraft Type</label>
+              <Select value={filters.aircraftType} onValueChange={(value) => setFilters(prev => ({ ...prev, aircraftType: value }))}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="B737-800">B737-800</SelectItem>
+                  <SelectItem value="B737 MAX 8">B737 MAX 8</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-2 block">Status</label>
+              <Select value={filters.status} onValueChange={(value) => setFilters(prev => ({ ...prev, status: value }))}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="maintenance">Maintenance</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-2 block">Search</label>
+              <Input
+                placeholder="Search aircraft..."
+                value={filters.search}
+                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+              />
+            </div>
+            <div className="flex items-center gap-2 pt-6">
+              <Checkbox 
+                checked={showInactive} 
+                onCheckedChange={setShowInactive}
+                id="show-inactive"
+              />
+              <label htmlFor="show-inactive" className="text-sm">Show Maintenance</label>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Aircraft List */}
+      <div className="space-y-4">
+        {filteredAircraft.map(aircraft => (
+          <Card key={aircraft.id}>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-4">
+                  <Plane className="h-5 w-5 text-gray-500" />
+                  <div>
+                    <h3 className="font-semibold">{aircraft.tailNumber}</h3>
+                    <p className="text-sm text-gray-600">{aircraft.type}</p>
+                  </div>
+                  <Badge variant={aircraft.status === 'active' ? 'default' : 'secondary'}>
+                    {aircraft.status}
+                  </Badge>
+                </div>
+                <div className="flex items-center gap-4 text-sm text-gray-600">
+                  <span>Utilization: {aircraft.utilization}%</span>
+                  <span>Location: {aircraft.currentLocation}</span>
+                </div>
+              </div>
+              
+              {aircraft.flights.length > 0 && (
+                <div className="space-y-2">
+                  {aircraft.flights.map(flight => (
+                    <div key={flight.id} className="flex items-center gap-4 p-2 bg-gray-50 rounded">
+                      <Badge className={getStatusColor(flight.status)}>
+                        {flight.id}
+                      </Badge>
+                      <div className="flex-1 grid grid-cols-4 gap-4 text-sm">
+                        <div>
+                          <span className="font-medium">{flight.departure.time}</span>
+                          <span className="text-gray-600 ml-1">{flight.departure.airport}</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">{flight.arrival.time}</span>
+                          <span className="text-gray-600 ml-1">{flight.arrival.airport}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Pax: {flight.passengers}</span>
+                        </div>
+                        <div className={getStatusTextColor(flight.status)}>
+                          {flight.status} {flight.delay > 0 && `(+${flight.delay}m)`}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  )
+}
